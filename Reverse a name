@@ -1,0 +1,50 @@
+#include <stdio.h> //I create standard input-output library
+#include <string.h> //I create manipulation library
+#include <ctype.h>// I create character classification library
+
+void reverse_name(char* name);//This is function prototype for reverse_name function
+
+int main(){
+	char k[100];//Define a chracter array of size 100
+
+	printf("Enter a first and last name: ");//We promt user for input
+	gets(k); //This is read a input structure and store in k
+
+	reverse_name(k);//Call reverse_name function
+
+	return 0;
+}
+
+void reverse_name(char* name)//We definition reverse_name function
+{
+	int f = 0, c = 0;//Variables
+	char first = ' ', last[100] = { ' ' };//first and second variable
+
+	while (isspace(name[f])) {//This loop is jump whitespace characters
+		f++;
+	}
+
+	if (isalpha(name[f])) {//First chracter
+		first = name[f++];
+	}
+
+	while (isalpha(name[f])) {//We get a name
+		f++;
+	}
+
+	while (isspace(name[f])) {
+		//This loop is jump whitespace characters
+		f++;
+	}
+
+	while (isalpha(name[f]) && name[f] != "\0") {//Last name
+		last[c++] = name[f++];
+	}
+
+	if (!isalpha(name[f]) || name[f] == '\0') {
+		last[c] = '\0';
+		//İf last chracter is null , last chracter with null chracter
+	}
+
+	printf("%s,%c.", last, first);//Finally print last name and first initial in reserve order
+}
