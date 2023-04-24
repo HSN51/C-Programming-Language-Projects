@@ -1,0 +1,109 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Node {
+    int userID;
+    int itemID;
+    float rating;
+    struct Node* next;
+} Node;
+
+Node* head = NULL;
+
+void insert(int userID, int itemID, float rating) {
+    Node* curr = head;
+    while (curr != NULL) {
+        if (curr->userID == userID && curr->itemID == itemID) {
+            curr->rating = rating;
+            printf("Customer rating (%d, %d) is updated\n", userID, itemID);
+            return;
+        }
+        curr = curr->next;
+    }
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    newNode->userID = userID;
+    newNode->itemID = itemID;
+    newNode->rating = rating;
+    newNode->next = head;
+    head = newNode;
+    printf("Customer rating (%d, %d) is added successful\n", userID, itemID);
+}
+
+void removeRating(int userID, int itemID) {
+    Node* curr = head;
+    Node* prev = NULL;
+    while (curr != NULL) {
+        if (curr->userID == userID && curr->itemID == itemID) {
+            if (prev == NULL) {
+                head = curr->next;
+            }
+            else {
+                prev->next = curr->next;
+            }
+            free(curr);
+            printf("Customer rating (%d, %d) is removed successful\n", userID, itemID);
+            return;
+        }
+        prev = curr;
+        curr = curr->next;
+    }
+    printf("Customer rating (%d, %d) does not exist\n", userID, itemID);
+}
+
+void rating(int userID, int itemID) {
+    Node* curr = head;
+    while (curr != NULL) {
+        if (curr->userID == userID && curr->itemID == itemID) {
+            printf("Customer rating (%d, %d) is: %0.1f\n", userID, itemID, curr->rating);
+            return;
+        }
+        curr = curr->next;
+    }
+    printf("Customer rating (%d, %d) is: 0.0\n", userID, itemID);
+}
+
+void average(int itemID) {
+    Node* current = head;
+    int number = 0;
+    float sum = 0.0;
+    while (current != NULL) {
+        if (current->itemID == itemID) {
+            number++;
+            sum += current->rating;
+        }
+        current = current->next;
+    }
+    if (number == 0) {
+        printf("Average rating (%d) is: 0.0\n", itemID);
+    }
+    else {
+        printf("Average rating (%d) is: %0.1f\n", itemID, sum / number);
+    }
+}
+
+int main() {
+    char remark[10];
+    int userID, itemID;
+    float ratingValue;
+    while (scanf("%s", remark) != EOF) {
+        if (strcmp(remark, "INSERT") == 0) {
+            scanf("%d %d %f", &userID, &itemID, &ratingValue);
+            insert(userID, itemID, ratingValue);
+        }
+        else if (strcmp(remark, "REMOVE") == 0) {
+            scanf("%d %d", &userID, &itemID);
+            removeRating(userID, itemID);
+        }
+        else if (strcmp(remark, "RATING") == 0)
+        {
+            scanf("%d %d", &userID, &itemID);
+            rating(userID, itemID);
+        }
+        else if (strcmp(remark, "AVERAGE") == 0) {
+            scanf("%d", &itemID);
+            average(itemID);
+        }
+    }
+    return 0;
+}
