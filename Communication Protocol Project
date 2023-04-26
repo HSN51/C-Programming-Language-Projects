@@ -1,0 +1,48 @@
+//Soru 4:
+ 
+#include <stdio.h>//Libraries
+#include <stdbool.h>
+
+int main() {
+    char size;//We decleration size
+    bool comstart = false;//We decleration bool then comstart equal false
+    while (1) {
+        size = getchar();
+        if (size == EOF) {
+            break;
+        }
+
+        switch (size) {//We use switch/case go to the size
+        case 'a':
+            if (!comstart) {
+                comstart = true;
+                printf("Started\n");
+            }
+            break;
+        case 'b':
+            if (comstart) {
+                printf("Task 1\n");
+            }
+            break;
+        case 'c':
+            if (comstart) {
+                printf("Task 2\n");
+            }
+            break;
+        case 'd':
+            if (comstart) {
+                printf("Ended\n");
+            }
+            comstart = false;
+            break;
+        case 'x':
+            if (comstart) {
+                printf("Quitting\n");
+            }
+            return 0;
+            break;
+        }
+    }
+
+    return 0;
+}
