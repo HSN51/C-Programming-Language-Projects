@@ -1,0 +1,61 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Define a structure to store the departure and arrival times
+struct Flight {
+    int departure_time; // in minutes since midnight
+    int arrival_time;   // in minutes since midnight
+};
+
+// Define a function to convert a time given in minutes past midnight to hours and minutes
+void put_time(int time) {
+    int hours = time / 60;
+    int minutes = time % 60;
+    if (hours < 12) {
+        printf("%d:%02d a.m.", hours, minutes);
+    } else if (hours == 12) {
+        printf("%d:%02d p.m.", hours, minutes);
+    } else {
+        printf("%d:%02d p.m.", hours - 12, minutes);
+    }
+}
+
+int main() {
+    // Define the array of flights
+    struct Flight flights[] = {
+        {480, 616},
+        {583, 712},
+        {679, 811},
+        {767, 900},
+        {840, 1008},
+        {1020, 1170},
+        {1140, 1400},
+        {1295, 1438}
+    };
+    int num_flights = sizeof(flights) / sizeof(flights[0]);
+    
+    // Prompt the user to enter a time
+    printf("Enter a 24-hour time: ");
+    int hours, minutes;
+    scanf("%d:%d", &hours, &minutes);
+    int input_time = hours * 60 + minutes;
+    
+    // Find the closest departure time
+    int min_diff = abs(input_time - flights[0].departure_time);
+    int closest_flight_index = 0;
+    for (int i = 1; i < num_flights; i++) {
+        int diff = abs(input_time - flights[i].departure_time);
+        if (diff < min_diff) {
+            min_diff = diff;
+            closest_flight_index = i;
+        }
+    }
+    // Print the closest departure and arrival times
+    printf("Closest departure time is ");
+    put_time(flights[closest_flight_index].departure_time);
+    printf(", arriving at ");
+    put_time(flights[closest_flight_index].arrival_time);
+    printf(".\n");
+    
+    return 0;
+}
