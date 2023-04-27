@@ -1,0 +1,80 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+
+#define Last_Value 0//Last value is defined as 0.
+int main(void) {
+	int number;//Store the entry integers.
+	int enumarate;//Keep track of "how many numbers are entered?".	
+
+	int  dividedby2[100];
+	int  dividedby3[100]; //Declare arrays to store numbers that are divisible by 2,3,4 and 5.
+	int  dividedby4[100];
+	int  dividedby5[100];
+	
+	int enumarate2 = 0;
+	int enumarate3 = 0;
+	int enumarate4 = 0;//Enumarates for each array.
+	int enumarate5 = 0;
+	
+	printf("Enter integers (either 0 or negative value to terminate):\n");//Read a integers and prints to console
+	
+	while (1)
+	{
+		scanf("%d", &number);//Read an integer.
+		if (number==Last_Value || number<0 )//If the last value is entered,the loop is terminated.
+		{
+			break;
+		}
+		enumarate++;//İncrement the enumarate.
+		if (number % 2 == 0)
+		{
+			dividedby2[enumarate2] = number;
+			enumarate2++;
+		}
+		if (number % 3 == 0)
+		{
+			dividedby3[enumarate3] = number;
+			enumarate3++;
+		}
+		if (number % 4 == 0)
+		{
+			dividedby4[enumarate4] = number;
+			enumarate4++;
+		}
+		if (number % 5 == 0)
+		{
+			dividedby5[enumarate5] = number;
+			enumarate5++;
+		}
+	}
+	
+	printf("You entered %d numbers.\n", enumarate);
+	
+	printf("%d  of them are divided by two. The list is given below.\n", enumarate2);
+	for (int i = 0; i < enumarate2; i++) {
+		printf("%d", dividedby2[i]);
+	}
+	printf("\n");
+	
+	printf("%d  of them are divided by three. The list is given below.\n", enumarate3);
+	for (int i = 0; i < enumarate3; i++) {
+		printf("%d", dividedby3[i]);
+	}
+	printf("\n");
+
+	printf("%d  of them are divided by four. The list is given below.\n", enumarate4);
+	for (int i = 0; i < enumarate4; i++) {
+		printf("%d", dividedby4[i]);
+	}
+	printf("\n");
+
+	printf("%d  of them are divided by five. The list is given below.\n", enumarate5);
+	for (int i = 0; i < enumarate5; i++) {
+		printf("%d", dividedby5[i]);
+	}
+	printf("\n");
+
+	
+	return 0;
+	
+}
