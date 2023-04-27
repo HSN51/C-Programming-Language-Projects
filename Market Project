@@ -1,0 +1,108 @@
+/*Hasan Huseyin Gumustepe    2200003975*/
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+float get_price(int productNo, int amountType);
+float totalPrice(float amount, int listPrice);
+float discount(float total_Price, int amount);
+
+float get_price(int productNo, int amountType)// Return the list price of the product
+{
+	float listPrice = 0;
+	switch (productNo)
+	{
+	  case 1:
+		if (amountType == 1)
+		{
+			listPrice = 1.15;
+		}
+	
+	    else if (amountType == 2)
+	    {
+		listPrice = 5.99;
+	    }
+	    break;
+	case 2:
+		if (amountType == 1)
+		{
+			listPrice = 0.99;
+		}
+
+	    else if (amountType == 2)
+	    {
+		     listPrice = 4.99;
+	    }
+	    break;
+	  case 3:
+		if (amountType == 1)
+		{
+			listPrice = 1.50;
+		}
+	
+	    else if (amountType == 2)
+	    {
+		listPrice = 4.50;
+	    }
+	    break;
+     }
+	return listPrice;
+}
+float totalPrice(float amount, int listPrice)
+{
+	return amount*listPrice;
+}
+
+float discount(float total_Price, int amount)
+{
+	if (amount>=2 && amount <=4)
+	{
+		total_Price= 0.95;
+	}
+
+	else if (amount >= 5 && amount <= 9)
+	{
+		total_Price = 0.9;
+	}
+
+	else if (amount > 10)
+	{
+		total_Price *= 0.85;
+	}
+	
+	return total_Price;
+}
+
+
+int main()
+{
+	int productNo, amountType, amount;
+	float listPrice, total_price,discountPrice;
+
+	printf("Enter the product number (1 for peach, 2 for pear, 3 for plum): ");
+	scanf("%d",&productNo);
+
+	printf("Enter 1 for amount, 2 for kilogram: ");
+	scanf("%d", &amountType);
+
+	listPrice = get_price(productNo, amountType);
+
+	if (amountType==1)
+	{
+		printf("Enter the quantity: ");
+		scanf("%d", &amount);
+		total_price = totalPrice(amount,listPrice);
+	
+		total_price = discount(total_price, amount);
+	}
+	else if (amountType == 2)
+	{
+		printf("Enter the kilogram: ");
+		scanf("%d",&amount);
+		total_price = listPrice;
+	
+		
+	}
+
+	printf("Total payment: $%.2f\n", total_price);
+}
+
+
