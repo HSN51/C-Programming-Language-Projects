@@ -1,0 +1,222 @@
+#include <stdio.h>
+#include <string.h>
+
+#define max_afetzede_sayisi 100
+#define max_isim_uzunluk 50
+#define max_telefon_uzunluk 20
+#define max_adres_uzunluk 100
+#define max_talep_uzunluk 200
+#define max_talep_sayisi 1000
+
+char disaster_isimleri[max_afetzede_sayisi][max_isim_uzunluk];
+char disaster_soyisimleri[max_afetzede_sayisi][max_isim_uzunluk];
+char disaster_telefonlar[max_afetzede_sayisi][max_telefon_uzunluk];
+char disaster_adresleri[max_afetzede_sayisi][max_adres_uzunluk];
+int afetzede_sayisi = 0;
+
+char talepler[max_talep_sayisi][max_talep_uzunluk];
+int talep_afetzede_idleri[max_talep_sayisi];
+int talep_sayisi = 0;
+
+void Disaster_ekle(char *Ad, char *Soyad, char *Telefon, char *Adres) {
+    if (afetzede_sayisi >= max_afetzede_sayisi) {
+        printf("Hata: Maksimum afetzede sayısına ulaşıldı.\n");
+        return;
+    }
+    strcpy(disaster_isimleri[afetzede_sayisi], Ad);
+    strcpy(disaster_soyisimleri[afetzede_sayisi], Soyad);
+    strcpy(disaster_telefonlar[afetzede_sayisi], Telefon);
+    strcpy(disaster_adresleri[afetzede_sayisi], Adres);
+    printf("Afetzedeye ID %d verildi.\n", afetzede_sayisi);
+    afetzede_sayisi++;
+}
+
+void Afetzede_guncelle(int id, char *Ad, char *Soyad, char *Telefon, char *Adres) {
+    if (id < 0 || id >= afetzede_sayisi) {
+        printf("Hata: Geçersiz afetzed ID'si.\n");
+        return;
+    }
+    strcpy(disaster_isimleri[id], Ad);
+    strcpy(disaster_soyisimleri[id], Soyad);
+    strcpy(disaster_telefonlar[id], Telefon);
+    strcpy(disaster_adresleri[id], Adres);
+    printf("Afetzedeki bilgiler güncellendi.\n");
+}
+
+void Disaster_sil(int id) {
+    if (id < 0 || id >= afetzede_sayisi) {
+        printf("Hata: Geçersiz afetzed ID'si.\n");
+        return;
+    }
+    for (int i = id; i < afetzede_sayisi - 1; i++) {
+        strcpy(disaster_isimleri[i], disaster_isimleri[i+1]);
+        strcpy(disaster_soyisimleri[i], disaster_soyisimleri[i+1]);
+        strcpy(disaster_telefonlar[i], disaster_telefonlar[i+1]);
+        strcpy(disaster_adresleri[i], disaster_adresleri[i+1]);
+    }
+    afetzede_sayisi--;
+    printf("Afetzedeki bilgiler ve yardım talebi silindi.\n");
+}
+
+void Help_TALEBI_KAYDET(int id, char *Aciklama) {
+    if (id < 0 || id >= afetzede_sayisi) {
+        printf("Hata: Geçersiz afetzed ID'si.\n");
+        return;
+    }
+    if (talep_sayisi >= max_talep_sayisi) {
+        printf("Hata: Maksimum yardım talebi sayısına ulaşıldı.\n");
+        return;
+    }
+    strcpy(talepler[talep_sayisi], Aciklama);
+    talep_afetzede_idleri[talep_sayisi] = id;
+    talep_sayisi++;
+    printf("Yardım talebi kaydedildi.\n");
+}
+
+void Disaster_listele() {
+    if (afetzede_sayisi == 0) {
+        printf("Kayıtlı afetzedeler yok.\n");
+        return;
+    }
+    printf("Afetzedeler:\n");
+    printf("ID\tİsim\tSoyisim\tTelefon\t\tAdres\n");
+    for (int i = 0; i < afetzede_sayisi; i++) {
+        printf("%d\t%s\t%s\t%s\t%s\n", i, disaster_isimleri[i], disaster_soyisimleri[i], disaster_telefonlar[i], disaster_adresleri[i]);
+    }
+}
+
+void Disaster_ara(int id) {
+    if (id < 0 || id >= afetzede_sayisi) {
+        printf("Hata: Geçersiz afetzed ID'si.\n");
+        return;
+    }
+    printf("Afetzedeki bilgiler:\n");
+    printf("İsim: %s\n", disaster_isimleri[id]);
+    printf("Soyisim: %s\n", disaster_soyisimleri[id]);
+    printf("Telefon: %s\n", disaster_telefonlar[id]);
+    printf("Adres: %s\n", disaster_adresleri[id]);
+    printf("Yardım talepleri:\n");
+    for (int i = 0; i < talep_sayisi; i++) {
+        if (talep_afetzede_idleri[i] == id) {
+            printf("- %s\n", talepler[i]);
+        }
+    }
+}
+
+void Help_TALEPLER_listele() {
+    if (talep_sayisi == 0) {
+        printf("Kayıtlı yardım talebi yok.\n");
+        return;
+    }
+    printf("Yardım talepleri:\n");
+    printf("Afetzed ID\tAçıklama\n");
+    for (int i = 0; i < talep_sayisi; i++) {
+        printf("%d\t\t%s\n", talep_afetzede_idleri[i], talepler[i]);
+    }
+}
+
+void Menu_goster() {
+    printf("Afetzedeler Yardım Sistemi\n");
+    printf("1. Afetzedeye ekle\n");
+    printf("2. Afetzedeyi güncelle\n");
+    printf("3. Afetzedeyi sil\n");
+    printf("4. Yardım talebi kaydet\n");
+    printf("5. Afetzedeleri listele\n");
+    printf("6. Afetzedeyi ara\n");
+    printf("7. Yardım taleplerini listele\n");
+    printf("0. Çıkış\n");
+}
+
+void Error_mesaj() {
+    printf("Hata: Geçersiz seçim.\n");
+}
+
+int main() {
+    int secim;
+    Menu_goster();
+    do {
+        printf("\nSeçiminizi girin: ");
+        scanf("%d", &secim);
+        switch (secim) {
+            case 1: {
+                char Ad[max_isim_uzunluk];
+                char Soyad[max_isim_uzunluk];
+                char Telefon[max_telefon_uzunluk];
+                char Adres[max_adres_uzunluk];
+                printf("Afetzedenin ismi: ");
+                scanf("%s", Ad);
+                printf("Afetzedenin soyismi: ");
+                scanf("%s", Soyad);
+                printf("Afetzedenin telefonu: ");
+                scanf("%s", Telefon);
+                printf("Afetzedenin adresi: ");
+                scanf("%s", Adres);
+                Disaster_ekle(Ad, Soyad, Telefon, Adres);
+                break;
+            }
+            case 2: {
+                int id;
+                char Ad[max_isim_uzunluk];
+                char Soyad[max_isim_uzunluk];
+                char Telefon[max_telefon_uzunluk];
+                char Adres[max_adres_uzunluk];
+                printf("Güncellenecek afetzed ID'si: ");
+                scanf("%d", &id);
+                printf("Afetzedenin yeni ismi: ");
+                scanf("%s", Ad);
+                printf("Afetzedenin yeni soyismi: ");
+                scanf("%s", Soyad);
+                printf("Afetzedenin yeni telefonu: ");
+                scanf("%s", Telefon);
+                printf("Afetzedenin yeni adresi: ");
+                scanf("%s", Adres);
+                Afetzede_guncelle(id, Ad, Soyad, Telefon, Adres);
+                break;
+            }
+            case 3: {
+                int id;
+                printf("Silinecek afetzed ID'si: ");
+                scanf("%d", &id);
+                Disaster_sil(id);
+                break;
+            }
+            case 4: {
+                int id;
+                char Aciklama[max_talep_uzunluk];
+                printf("Yardım talebi kaydedilecek afetzed ID'si: ");
+                scanf("%d", &id);
+                printf("Yardım talebi açıklaması: ");
+                getchar();
+                fgets(Aciklama, max_talep_uzunluk, stdin);
+                Help_TALEBI_KAYDET(id, Aciklama);
+                break;
+            }
+            case 5: {
+                Disaster_listele();
+break;
+}
+case 6: {
+int id;
+printf("Aranacak afetzed ID'si: ");
+scanf("%d", &id);
+Disaster_ara(id);
+break;
+}
+case 7: {
+Help_TALEPLER_listele();
+break;
+}
+case 0: {
+printf("Programdan çıkılıyor...\n");
+break;
+}
+default: {
+Error_mesaj();
+break;
+}
+}
+} while (secim != 0);
+
+return 0;
+}
+
